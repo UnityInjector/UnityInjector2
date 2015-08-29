@@ -16,49 +16,50 @@ namespace UnityInjector2
         static void GetMonoRemoteFunctions(MemorySharp memorySharp, out RemoteFunction mono_get_root_domain, out RemoteFunction mono_thread_attach, out RemoteFunction mono_security_set_mode, out RemoteFunction mono_domain_get, out RemoteFunction mono_domain_assembly_open, out RemoteFunction mono_assembly_get_image, out RemoteFunction mono_class_from_name, out RemoteFunction mono_class_get_method_from_name, out RemoteFunction mono_runtime_invoke)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            mono_get_root_domain = memorySharp[DesktopMonoDll].FindFunction("mono_get_root_domain");
+            mono_get_root_domain = memorySharp[DesktopMonoDll].FindFunction("mono_get_root_domain"); // Returns MonoDomain.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_get_root_domain.Name, mono_get_root_domain.BaseAddress.ToString("X2"));
             Console.ForegroundColor = ConsoleColor.White;
-            mono_thread_attach = memorySharp[DesktopMonoDll].FindFunction("mono_thread_attach");
+            mono_thread_attach = memorySharp[DesktopMonoDll].FindFunction("mono_thread_attach"); // Returns MonoThread.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_thread_attach.Name, mono_thread_attach.BaseAddress.ToString("X2"));
             Console.ForegroundColor = ConsoleColor.White;
-            mono_security_set_mode = memorySharp[DesktopMonoDll].FindFunction("mono_security_set_mode");
+            mono_security_set_mode = memorySharp[DesktopMonoDll].FindFunction("mono_security_set_mode"); // Returns void.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_security_set_mode.Name, mono_security_set_mode.BaseAddress.ToString("X2"));
             Console.ForegroundColor = ConsoleColor.White;
-            mono_domain_get = memorySharp[DesktopMonoDll].FindFunction("mono_domain_get");
+            mono_domain_get = memorySharp[DesktopMonoDll].FindFunction("mono_domain_get"); // Returns MonoDomain.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_domain_get.Name, mono_domain_get.BaseAddress.ToString("X2"));
             Console.ForegroundColor = ConsoleColor.White;
-            mono_domain_assembly_open = memorySharp[DesktopMonoDll].FindFunction("mono_domain_assembly_open");
+            mono_domain_assembly_open = memorySharp[DesktopMonoDll].FindFunction("mono_domain_assembly_open"); // Returns MonoAssembly.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_domain_assembly_open.Name, mono_domain_assembly_open.BaseAddress.ToString("X2"));
             Console.ForegroundColor = ConsoleColor.White;
-            mono_assembly_get_image = memorySharp[DesktopMonoDll].FindFunction("mono_assembly_get_image");
+            mono_assembly_get_image = memorySharp[DesktopMonoDll].FindFunction("mono_assembly_get_image"); // Returns MonoImage.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_assembly_get_image.Name, mono_assembly_get_image.BaseAddress.ToString("X2"));
             Console.ForegroundColor = ConsoleColor.White;
-            mono_class_from_name = memorySharp[DesktopMonoDll].FindFunction("mono_class_from_name");
+            mono_class_from_name = memorySharp[DesktopMonoDll].FindFunction("mono_class_from_name"); // Returns MonoClass.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_class_from_name.Name, mono_class_from_name.BaseAddress.ToString("X2"));
             Console.ForegroundColor = ConsoleColor.White;
-            mono_class_get_method_from_name = memorySharp[DesktopMonoDll].FindFunction("mono_class_get_method_from_name");
+            mono_class_get_method_from_name = memorySharp[DesktopMonoDll].FindFunction("mono_class_get_method_from_name"); // Returns MonoMethod.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_class_get_method_from_name.Name, mono_class_get_method_from_name.BaseAddress.ToString("X2"));
             Console.ForegroundColor = ConsoleColor.White;
-            mono_runtime_invoke = memorySharp[DesktopMonoDll].FindFunction("mono_runtime_invoke");
+            mono_runtime_invoke = memorySharp[DesktopMonoDll].FindFunction("mono_runtime_invoke"); // Returns MonoObject.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Function \"{0}\" found at 0x{1} address", mono_runtime_invoke.Name, mono_runtime_invoke.BaseAddress.ToString("X2"));
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         static void AttachToMainThread(RemoteFunction mono_get_root_domain, RemoteFunction mono_thread_attach)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("Attaching to/Entering the primary/main mono thread/context... ");
-            IntPtr mono_get_root_domain_result = mono_get_root_domain.Execute(CallingConventions.Cdecl);
-            IntPtr mono_thread_attach_result = mono_thread_attach.Execute(CallingConventions.Cdecl, mono_get_root_domain_result);
+            IntPtr mono_get_root_domain_result = mono_get_root_domain.Execute(CallingConventions.Cdecl); // Returns MonoDomain.
+            IntPtr mono_thread_attach_result = mono_thread_attach.Execute(CallingConventions.Cdecl, mono_get_root_domain_result); // Returns MonoThread.
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("success.");
             Console.ForegroundColor = ConsoleColor.White;
@@ -73,6 +74,7 @@ namespace UnityInjector2
             mono_security_set_mode.Execute(CallingConventions.Cdecl, (int)MonoSecurityMode.MONO_SECURITY_MODE_NONE); // void (returns IntPtr.Zero as expected?)
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("success.");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         [STAThread]
